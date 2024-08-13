@@ -1,9 +1,9 @@
 // Programa de adição que usa JOptionPane para entrada e saída.
-import javax.swing.JOptionPane; // importa a biblioteca JOptionPane, uma classe que possibilita a criação de uma caixa de dialogo padrão que ou solicita um valor para o usuário ou retorna uma informação
+import javax.swing.JOptionPane; // importa a biblioteca JOptionPane, uma classe que possibilita a criação de uma caixa de dialogo padrão que ou solicita um valor para o usuário ou retorna uma informação || "import biblioteca.módulo.componente;"
 
-public class Addition // criado a classe Addition (adição)
+public class Addition // criado (declarado) a classe Addition (adição)
 {
-   public static void main(String[] args) // criado o método executor main
+   public static void main(String[] args) // criado (declarado) o método executor main || "[]" = matriz
    {
       // obter entrada do usuário a partir de diálogos de entrada JOptionPane
       String firstNumber = // instância a classe String para receber o primeiro número
