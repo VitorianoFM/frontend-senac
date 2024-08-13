@@ -1,41 +1,24 @@
-// Fig. 12.2: Addition.java
-// Addition program that uses JOptionPane for input and output.
-import javax.swing.JOptionPane; 
+// Programa de adição que usa JOptionPane para entrada e saída.
+import javax.swing.JOptionPane; // importa a biblioteca JOptionPane, uma classe que possibilita a criação de uma caixa de dialogo padrão que ou solicita um valor para o usuário ou retorna uma informação
 
-public class Addition 
+public class Addition // criado a classe Addition (adição)
 {
-   public static void main(String[] args)
+   public static void main(String[] args) // criado o método executor main
    {
-      // obtain user input from JOptionPane input dialogs
-      String firstNumber = 
-         JOptionPane.showInputDialog("Digite o primeiro número inteiro");
-      String secondNumber =
-          JOptionPane.showInputDialog("Digite o segundo número inteiro");
+      // obter entrada do usuário a partir de diálogos de entrada JOptionPane
+      String firstNumber = // instância a classe String para receber o primeiro número
+         JOptionPane.showInputDialog("Digite o primeiro número inteiro"); // exibe uma caixa com texto/parâmetro solicitando a entrada de dados pelo usuário em um campo de texto, e botões OK e Cancel
+      String secondNumber = // instância a classe String para receber o segundo número
+          JOptionPane.showInputDialog("Digite o segundo número inteiro"); // exibe uma caixa com texto/parâmetro solicitando a entrada de dados pelo usuário em um campo de texto, e botões OK e Cancel
 
-      // convert String inputs to int values for use in a calculation
-      int number1 = Integer.parseInt(firstNumber); 
-      int number2 = Integer.parseInt(secondNumber);
+      // converter entradas de String (texto) em valores int para uso no cálculo
+      int number1 = Integer.parseInt(firstNumber); // converte a entrada da String firstNumber para uma variável tipo (número) inteiro number1
+      int number2 = Integer.parseInt(secondNumber); // converte a entrada da String secondNumber para uma variável tipo (número) inteiro number2
 
-      int sum = number1 + number2; // add numbers
+      int sum = number1 + number2; // realiza a soma dos dois números inteiros, somando o number1 + number2 resultando na variável sum
 
-      // display result in a JOptionPane message dialog
-      JOptionPane.showMessageDialog(null, "A soma é " + sum, 
-         "Soma dos dois números inteiros", JOptionPane.PLAIN_MESSAGE);
+      // exibir resultado em uma caixa de diálogo de mensagem JOptionPane
+      JOptionPane.showMessageDialog(null, "A soma é " + sum, // mostra o resultado da soma (sum) após a impressão do texto
+         "Soma dos dois números inteiros", JOptionPane.PLAIN_MESSAGE); // imprime o titulo da janela com o texto
    } 
-} // end class Addition
-
-
-/**************************************************************************
- * (C) Copyright 1992-2014 by Deitel & Associates, Inc. and               *
- * Pearson Education, Inc. All Rights Reserved.                           *
- *                                                                        *
- * DISCLAIMER: The authors and publisher of this book have used their     *
- * best efforts in preparing the book. These efforts include the          *
- * development, research, and testing of the theories and programs        *
- * to determine their effectiveness. The authors and publisher make       *
- * no warranty of any kind, expressed or implied, with regard to these    *
- * programs or to the documentation contained in these books. The authors *
- * and publisher shall not be liable in any event for incidental or       *
- * consequential damages in connection with, or arising out of, the       *
- * furnishing, performance, or use of these programs.                     *
- *************************************************************************/
+} // fim da classe Addition (adição)
