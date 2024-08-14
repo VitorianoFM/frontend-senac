@@ -22,6 +22,6 @@ public class Addition // criado (declarado) a classe Addition (adição)
 
       // exibir resultado em uma caixa de diálogo de mensagem JOptionPane
       JOptionPane.showMessageDialog(null, "A soma é " + sum, // mostra o resultado da soma (sum) após a impressão do texto || o pacote showMessageDialog já converte a variável posterior quando é concatenado com uma String || "," = separador de parâmetro
-         "Soma dos dois números inteiros", JOptionPane.PLAIN_MESSAGE); // imprime o titulo da janela com o texto
+         "Soma dos três números inteiros", JOptionPane.PLAIN_MESSAGE); // imprime o titulo da janela com o texto
    } 
 } // fim da classe Addition (adição)
