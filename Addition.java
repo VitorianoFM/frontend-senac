@@ -18,7 +18,7 @@ public class Addition // criado (declarado) a classe Addition (adição)
       int number2 = Integer.parseInt(secondNumber); // converte a entrada da String secondNumber para uma variável tipo (número) inteiro number2 || "=" é igual operador de atribuição
       int number3 = Integer.parseInt(thirdNumber); // converte a entrada da String secondNumber para uma variável tipo (número) inteiro number3 || "=" é igual operador de atribuição
 
-      int sum = number1 + number2 + number3; // realiza a soma dos dois números inteiros, somando o number1 + number2 + number3 resultando na variável sum
+      int sum = number1 + number2 + number3; // realiza a soma dos três números inteiros, somando o number1 + number2 + number3 resultando na variável sum
 
       // exibir resultado em uma caixa de diálogo de mensagem JOptionPane
       JOptionPane.showMessageDialog(null, "A soma é " + sum, // mostra o resultado da soma (sum) após a impressão do texto || o pacote showMessageDialog já converte a variável posterior quando é concatenado com uma String || "," = separador de parâmetro
