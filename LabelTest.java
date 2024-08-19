@@ -1,9 +1,9 @@
 // Testando LabelFrame.
 import javax.swing.JFrame; // importação de bliblioteca.modulo.componente
 
-public class LabelTest 
+public class LabelTest  // criado (declarado) a classe LabelTest
 {
-   public static void main(String[] args)
+   public static void main(String[] args) // criado (declarado) o método executor main || "[]" = matriz
    { 
       LabelFrame labelFrame = new LabelFrame(); 
       labelFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // define o padrão de operação ao fechar para sair
