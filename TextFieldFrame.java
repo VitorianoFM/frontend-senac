@@ -1,12 +1,13 @@
 // JTextFields e JPasswordFields.
 import java.awt.FlowLayout; // importação de bliblioteca.modulo.componente
-import java.awt.event.ActionListener; // importação de bliblioteca.modulo.componente.
+import java.awt.event.ActionListener; // importação de bliblioteca.modulo.submodulo.componente.
 import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JOptionPane;
 // import java.awt.*; // carrega todos os componentes do módulo awt da biblioteca java || sugestão do professor para evitar o erro de não carregar algum componente do módulo
+// import java.awt.event*; // carrega todos os componentes do módulo awt da biblioteca java || sugestão do professor para evitar o erro de não carregar algum componente do módulo
 // import javax.swing.*; // carrega todos os componentes do módulo swing da biblioteca javax || sugestão do professor para evitar o erro de não carregar algum componente do módulo
 
 public class TextFieldFrame extends JFrame // criado (declarado) a classe TextFieldFrame herdada do JFrame
@@ -57,7 +58,7 @@ public class TextFieldFrame extends JFrame // criado (declarado) a classe TextFi
       {
          String string = ""; 
          // usuário pressionou Enter em JTextField textField1
-         if (event.getSource() == textField1)
+         if (event.getSource() == textField1) //  || "==" é um operador de comparação
             string = String.format("textField1: %s",
                event.getActionCommand());
 
