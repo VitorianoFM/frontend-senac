@@ -1,6 +1,8 @@
 // import java.awt.FlowLayout; // importação de bliblioteca.modulo.componente
 import java.awt.GridLayout;
 import java.awt.event.ActionListener; // importação de bliblioteca.modulo.submodulo.componente.
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
@@ -13,6 +15,7 @@ import javax.swing.SwingConstants;
 // import java.awt.*; // carrega todos os componentes do módulo awt da biblioteca java || sugestão do professor para evitar o erro de não carregar algum componente do módulo
 // import java.awt.event*; // carrega todos os componentes do módulo awt da biblioteca java || sugestão do professor para evitar o erro de não carregar algum componente do módulo
 // import javax.swing.*; // carrega todos os componentes do módulo swing da biblioteca javax || sugestão do professor para evitar o erro de não carregar algum componente do módulo
+// import java.util.*; // carrega todos os componentes do módulo swing da biblioteca java || sugestão do professor para evitar o erro de não carregar algum componente do módulo
 
 public class Calculator extends JFrame {
 
@@ -36,13 +39,14 @@ public class Calculator extends JFrame {
  
        // construir campo de texto com 10 colunas
        label1 = new JLabel("Digite o primeiro número:", SwingConstants.RIGHT);
-       add(label1);
+       add(label1); // adicionar label1 ao JFrame
        textField1 = new JTextField(10); // apresentar o campo de texto com tamanho de 10 colunas ao usuário || declarar variável || "=" é igual operador de atribuição
+         textField1.setColumns(10);
        add(textField1); // adicionar textField1 ao JFrame
  
        // construir campo de texto com texto padrão
        label2 = new JLabel("Digite o segundo número:", SwingConstants.RIGHT);
-       add(label2);
+       add(label2); // adicionar label2 ao JFrame
        textField2 = new JTextField(10); // apresentar o texto dentro do campo com tamanho do texto ao usuário || declarar variável || "=" é igual operador de atribuição
        add(textField2); // adicionar textField2 ao JFrame
  
@@ -54,6 +58,27 @@ public class Calculator extends JFrame {
        // registrar manipuladores de eventos
        TextFieldHandler handler = new TextFieldHandler(); // Cria um objeto: Cria uma nova instância de uma classe chamada TextFieldHandler. Esta classe implementa a interface ActionListener e contém o código que será executado quando um evento de ação ocorrer em um dos TextFields
        btnCalcular.addActionListener(handler); // Registra o handler: registrar o objeto handler como um listener para os eventos de ação dos TextFields textField1. Isso significa que quando um usuário pressiona Enter em qualquer um desses campos, o método actionPerformed da classe TextFieldHandler será chamado
+       textField1.addKeyListener(new KeyAdapter() { // Adiciona um ouvinte de eventos de teclado ao componente textField1. Isso significa que, sempre que uma tecla for pressionada nesse campo, o código dentro do ouvinte será executado. Cria um novo objeto da classe KeyAdapter. Essa classe é uma classe abstrata que implementa a interface KeyListener. Ao estender essa classe, você precisa sobrescrever apenas os métodos que te interessam, neste caso, o método keyReleased.
+         @Override // Indica que este método está sobrescrevendo um método da classe pai (neste caso, da classe KeyAdapter).
+         public void keyReleased(KeyEvent e) { // Este método é chamado sempre que uma tecla é solta no campo de texto. O parâmetro e contém informações sobre o evento de teclado.
+            if (textField1.getText().length() > 9) { // Verifica se o comprimento do texto atual no campo textField1 é maior que 10 caracteres.
+               String txtTextField1 = textField1.getText(); // Cria uma cópia do texto atual do campo.
+               textField1.setText(txtTextField1.substring(0, 9)); // Define o texto do campo para os primeiros 9 caracteres da cópia, efetivamente truncando o texto.
+               lblNotificacao.setText("Campo1 está limitado a apenas 9 números inteiros"); // Exibe uma mensagem de notificação informando o usuário sobre a limitação.
+            }
+         }
+       });
+       
+       textField2.addKeyListener(new KeyAdapter() { // Adiciona um ouvinte de eventos de teclado ao componente textField1. Isso significa que, sempre que uma tecla for pressionada nesse campo, o código dentro do ouvinte será executado. Cria um novo objeto da classe KeyAdapter. Essa classe é uma classe abstrata que implementa a interface KeyListener. Ao estender essa classe, você precisa sobrescrever apenas os métodos que te interessam, neste caso, o método keyReleased.
+         @Override // Indica que este método está sobrescrevendo um método da classe pai (neste caso, da classe KeyAdapter).
+         public void keyReleased(KeyEvent e) { // Este método é chamado sempre que uma tecla é solta no campo de texto. O parâmetro e contém informações sobre o evento de teclado.
+            if (textField2.getText().length() > 9) { // Verifica se o comprimento do texto atual no campo textField2 é maior que 10 caracteres.
+               String txtTextField2 = textField2.getText(); // Cria uma cópia do texto atual do campo.
+               textField2.setText(txtTextField2.substring(0, 9)); // Define o texto do campo para os primeiros 9 caracteres da cópia, efetivamente truncando o texto.
+               lblNotificacao.setText("Campo2 está limitado a apenas 9 números inteiros"); // Exibe uma mensagem de notificação informando o usuário sobre a limitação.
+            }
+         }
+       });
     } // fim do construtor TextFieldFrame
  
     // classe interna privada para manipulação de eventos
@@ -64,36 +89,36 @@ public class Calculator extends JFrame {
        public void actionPerformed(ActionEvent event) // Este é o método que será chamado quando um evento de ação ocorrer em qualquer um dos JTextFields. O parâmetro event contém informações sobre o evento, incluindo qual componente o gerou
        {
          // usuário pressionou Enter em JTextField textField1
-         if(textField1.getText().trim().length() == 0) {
+         if(textField1.getText().trim().length() == 0) { // Obtém o texto que está atualmente no campo textField1. Remove qualquer espaço em branco no início ou no final da string. Verifica se o comprimento da string resultante após o trim é zero. Se for, significa que o campo está vazio.
             // notificar usuário que o campo 1 está vazio
-            lblNotificacao.setText("O primeiro campo está vazio!");
+            lblNotificacao.setText("O primeiro campo está vazio!"); // Se o primeiro campo estiver vazio, o rótulo lblNotificacao é atualizado com a mensagem de erro e o foco é direcionado para o campo textField1 para que o usuário possa preencher o campo.
             textField1.requestFocus();
          } else {
-            if(textField2.getText().trim().length() == 0) {
+            if(textField2.getText().trim().length() == 0) { // Obtém o texto que está atualmente no campo textField1. Remove qualquer espaço em branco no início ou no final da string. Verifica se o comprimento da string resultante após o trim é zero. Se for, significa que o campo está vazio.
                // notificar usuário que o campo 2 está vazio
-               lblNotificacao.setText("O segundo campo está vazio!");
+               lblNotificacao.setText("O segundo campo está vazio!"); // Se o primeiro campo estiver vazio, o rótulo lblNotificacao é atualizado com a mensagem de erro e o foco é direcionado para o campo textField1 para que o usuário possa preencher o campo.
                textField2.requestFocus();
-            } else {
+            } else { // Indica que este bloco será executado se a condição do if anterior (campos vazios) for falsa, ou seja, se ambos os campos estiverem preenchidos.
                // aqui será a soma
-               try {
-                  textField1.setText(somenteNumeros(textField1.getText()));
-                  textField2.setText(somenteNumeros(textField2.getText()));
-                  int soma = Integer.valueOf(textField1.getText()) + Integer.valueOf(textField2.getText());
-                  lblNotificacao.setText(String.format("Resultado: %s", soma));
-               } catch (Exception e) {
-                  lblNotificacao.setText("Por favor digite apenas números inteiros");
+               try { // Inicia um bloco de código que pode lançar uma exceção.
+                  textField1.setText(somenteNumeros(textField1.getText())); // Obtém o texto do textField1. Chama a função somenteNumeros para remover quaisquer caracteres não numéricos do texto. Atribui o texto limpo de volta ao textField1.
+                  textField2.setText(somenteNumeros(textField2.getText())); // Obtém o texto do textField2. Chama a função somenteNumeros para remover quaisquer caracteres não numéricos do texto. Atribui o texto limpo de volta ao textField2.
+                  int soma = Integer.valueOf(textField1.getText()) + Integer.valueOf(textField2.getText()); // Converte o texto dos campos para números inteiros usando Integer. valueOf. Realiza a soma dos dois números e armazena o resultado na variável soma.
+                  lblNotificacao.setText(String.format("Resultado: %s", soma)); // Formata uma string com o resultado da soma e exibe essa string no rótulo lblNotificacao.
+               } catch (Exception e) { // Captura qualquer exceção que possa ser lançada durante a execução do bloco try.
+                  lblNotificacao.setText("Por favor digite apenas números inteiros"); // Se ocorrer uma exceção (provavelmente uma NumberFormatException se o usuário digitou algo que não é um número), exibe uma mensagem de erro no rótulo.
                }
             }
          }
        } 
     
-    public String somenteNumeros(String strTexto) {
-      boolean achouNumero;
-      ArrayList<String> caracteresEncontrados = new ArrayList<String>();
-       for (int c = 0; c < strTexto.length(); c++) {
-          String caracterTemp = strTexto.substring(c,c+1);
+    public String somenteNumeros(String strTexto) { // Define um método público chamado somenteNumeros que recebe uma string como entrada e retorna uma string como resultado.
+      boolean achouNumero; // é um booleano usado para indicar se o caractere atual é um número.
+      ArrayList<String> caracteresEncontrados = new ArrayList<String>(); // é uma lista de strings que armazenará os caracteres não numéricos encontrados.
+       for (int c = 0; c < strTexto.length(); c++) { // Percorre cada caractere da string strTexto.
+          String caracterTemp = strTexto.substring(c,c+1); // Extrai o caractere atual da string.
           achouNumero = false;
-          for (int n = 0; n < numeros.length; n++) {
+          for (int n = 0; n < numeros.length; n++) { // Percorre cada número do array numeros. Compara o caractere atual com cada número. Se encontrar uma correspondência, marca achouNumero como verdadeiro e sai do loop interno (usando break).
              if (caracterTemp.equals(numeros[n])) {
                 achouNumero = true;
                 break;
@@ -102,13 +127,13 @@ public class Calculator extends JFrame {
        if (achouNumero) {
           continue;
        } else {
-          caracteresEncontrados.add(caracterTemp);
+          caracteresEncontrados.add(caracterTemp); // Se achouNumero for falso, adiciona o caractere não numérico à lista caracteresEncontrados.
        }
     }
-    for (int c = 0; c < caracteresEncontrados.size(); c++) {
-       strTexto = strTexto.replace(caracteresEncontrados.get(c), "");
+    for (int c = 0; c < caracteresEncontrados.size(); c++) { // Percorre a lista de caracteres não numéricos.
+       strTexto = strTexto.replace(caracteresEncontrados.get(c), ""); // Para cada caractere não numérico, remove todas as ocorrências desse caractere da string original strTexto usando o método replace.
     }
-    return strTexto;
+    return strTexto; // Retorna a string resultante com todos os caracteres não numéricos removidos.
    }
    } // fim da classe interna privada TextFieldHandler
     public static void main(String[] args) // criado (declarado) o método executor main || "[]" = matriz
