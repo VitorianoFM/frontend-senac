@@ -14,7 +14,10 @@ public class ListFrame extends JFrame // Define uma classe pública chamada List
       Color.LIGHT_GRAY, Color.MAGENTA, Color.ORANGE, Color.PINK, 
       Color.RED, Color.WHITE, Color.YELLOW}; // Cria uma matriz constante privada chamada cores que armazena um conjunto predefinido de cores. Essas cores podem ser acessadas em qualquer lugar dentro da classe usando cores[indice], onde indice é um número inteiro representando o índice da cor desejada na matriz (por exemplo, cores[0] para preto).
 
-   // Construtor ListFrame adiciona JScrollPane contendo JList ao JFrame
+   private final JList<String> tamanhoJList;
+   private static final String[] tamanhoNames = {"Pequeno", "Médio", "Alto"};
+
+    // Construtor ListFrame adiciona JScrollPane contendo JList ao JFrame
    public ListFrame() // Define um construtor público para a classe ComboBoxFrame. Construtor é um método especial que é chamado quando um objeto da classe é criado.
    {
       super("Teste de Lista"); // Chama o construtor da classe pai (JFrame) para criar a janela e define o título da janela como "JCheckBox Test".
@@ -29,6 +32,11 @@ public class ListFrame extends JFrame // Define uma classe pública chamada List
       // adicione um JScrollPane contendo JList ao quadro
       add(new JScrollPane(colorJList)); // Cria uma barra de rolagem e a adicionando à interface do seu programa Java. Essa barra de rolagem estará associada à lista de cores, permitindo que o usuário role a lista se ela for maior do que a área visível.
 
+      tamanhoJList = new JList<String>(tamanhoNames);
+      tamanhoJList.setVisibleRowCount(3);
+      tamanhoJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+      add(new JScrollPane(tamanhoJList));
+
       colorJList.addListSelectionListener(
          new ListSelectionListener() // Adiciona um ouvinte de seleção de lista (ListSelectionListener) ao componente JList chamado colorJList. Um ouvinte de seleção de lista é um objeto que é notificado quando um item na lista é selecionado ou desselecionado.
          {   
@@ -40,6 +48,32 @@ public class ListFrame extends JFrame // Define uma classe pública chamada List
                   colors[colorJList.getSelectedIndex()]); // Define a cor de fundo do componente principal da janela (o getContentPane()) para a cor selecionada na lista de cores (colors[colorJList.getSelectedIndex()]).
             } 
          } 
-      ); 
+      );
+      
+      tamanhoJList.addListSelectionListener(
+         new ListSelectionListener() {
+            @Override // Essa anotação indica que o método está sobrescrevendo um método da classe pai. Em outras palavras, ele está redefinindo o comportamento de um método herdado.
+            public void valueChanged(ListSelectionEvent event) // Atualiza a interface do usuário quando um item é selecionado em uma lista. Por exemplo, se um usuário seleciona um item em uma lista de produtos, o método valueChanged pode ser usado para exibir os detalhes do produto selecionado.
+            {
+               switch (tamanhoJList.getSelectedIndex()) {
+                  case 0:
+                  setSize(350, 150);
+                  break;
+                  
+                  case 1:
+                  setSize(350, 300);
+                  break;
+
+                  case 2:
+                  setSize(350, 600);
+                  break;
+
+                  default:
+                  setSize(350, 150);
+                  break;
+               }
+            } 
+         }
+      );  
    } 
 } // fim da classe ListFrame
