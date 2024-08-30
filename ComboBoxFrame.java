@@ -9,12 +9,13 @@ public class ComboBoxFrame extends JFrame // Define uma classe pública chamada 
     private final JLabel label; // Rótulo final e privado para exibir o ícone selecionado.
 
     private static final String[] names = 
-        {"bug1.gif", "bug2.gif",  "travelbug.gif", "buganim.gif"}; // cria uma matriz estática privada de strings chamada 'names', contendo os nomes de quatro arquivos GIF: 'bug1.gif', 'bug2.gif', 'travelbug.gif' e 'buganim.gif'. 
+        {"bug1.gif", "bug2.gif",  "travelbug.gif", "buganim.gif", "bugdog.gif"}; // cria uma matriz estática privada de strings chamada 'names', contendo os nomes de quatro arquivos GIF: 'bug1.gif', 'bug2.gif', 'travelbug.gif', 'buganim.gif' e 'bugdog.gif'. 
     private final Icon[] icons = { 
         new ImageIcon(getClass().getResource(names[0])),
         new ImageIcon(getClass().getResource(names[1])), 
         new ImageIcon(getClass().getResource(names[2])),
-        new ImageIcon(getClass().getResource(names[3]))}; // Declara um array privado e final de ícones chamado 'icons', contendo quatro ícones carregados a partir de arquivos de imagem especificados nos nomes do array 'names'.
+        new ImageIcon(getClass().getResource(names[3])),
+        new ImageIcon(getClass().getResource(names[4]))}; // Declara um array privado e final de ícones chamado 'icons', contendo quatro ícones carregados a partir de arquivos de imagem especificados nos nomes do array 'names'.
 
    // O construtor ComboBoxFrame adiciona JComboBox ao JFrame
     public ComboBoxFrame() // Define um construtor público para a classe ComboBoxFrame. Construtor é um método especial que é chamado quando um objeto da classe é criado.
