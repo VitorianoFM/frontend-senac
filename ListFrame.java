@@ -57,20 +57,20 @@ public class ListFrame extends JFrame // Define uma classe pública chamada List
             {
                switch (tamanhoJList.getSelectedIndex()) {
                   case 0:
-                  setSize(350, 150);
-                  break;
+                     setSize(350, 150);
+                     break;
                   
                   case 1:
-                  setSize(350, 300);
-                  break;
+                     setSize(350, 300);
+                     break;
 
                   case 2:
-                  setSize(350, 600);
-                  break;
+                     setSize(350, 600);
+                     break;
 
                   default:
-                  setSize(350, 150);
-                  break;
+                     setSize(350, 150);
+                     break;
                }
             } 
          }
