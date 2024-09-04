@@ -1,5 +1,4 @@
 import java.awt.*; // Importa todos os componentes do módulo AWT.
-import java.awt.event.*; // Importa todos componentes dos eventos do módulo AWT.
 import javax.swing.*; // Importa todos os componentes do módulo Swing.
 
 // Classe TelaDeLogin que herda de JFrame para criar uma interface gráfica de login.
@@ -50,6 +49,8 @@ public class TelaDeLogin extends JFrame
    // Método main, ponto de entrada do programa.
    public static void main(String[] args) {
       TelaDeLogin appTelaDeLogin = new TelaDeLogin(); // Cria uma variável da janela de login.
-      appTelaDeLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Define a operação de fechamento da janela.
+      appTelaDeLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Define que ao fechar a janela, o programa será encerrado.
+      appTelaDeLogin.setSize(350, 150); // Define o tamanho da janela para 350 pixels de largura e 150 pixels de altura.
+      appTelaDeLogin.setVisible(true); // Torna a janela visível na tela.
    }
 }
