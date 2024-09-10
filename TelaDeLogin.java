@@ -50,19 +50,19 @@ public class TelaDeLogin extends JFrame
             public void actionPerformed(ActionEvent event) {
                try {
                   Connection conexao = MySQLConnector.conectar();
-                  String strSqlLogin = "select * from `db_senac`.`tbl_senac` where `email` = '" + txtLogin.getText() + "' and `senha` = '" + txtSenha.getPassword() + "';";
+                  String strSqlLogin = "select * from `db_senac`.`tbl_senac` where `email` = '" + txtLogin.getText() + "' and `senha` = '" + String.valueOf(txtSenha.getPassword()) + "';";
                   Statement stmSqlLogin = conexao.createStatement();
                   ResultSet rstSqlLogin = stmSqlLogin.executeQuery(strSqlLogin);
                   rstSqlLogin.next();
                   stmSqlLogin.close();
                   lblNotificacoes.setText("Conectado com sucesso!");
-               } catch (Esception e) {
+               } catch (Exception e) {
                   lblNotificacoes.setText("Não foi possível encontrar o login e/ou senha digitados/informados! Por favor, verifique e tente novamente. Veja o erro: " + e);
                }
             }
-         };
+         }
       );
-      setSize(50, 250); // Define o tamanho da janela.
+      setSize(150, 200); // Define o tamanho da janela.
       setVisible(true); // Torna a janela visível.
 
    }
