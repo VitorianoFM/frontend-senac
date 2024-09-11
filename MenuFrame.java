@@ -1,36 +1,36 @@
 // Demonstrating menus.
-import java.awt.*; // Conjunto de classes para criar interfaces gráficas básicas.
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.*; // É uma biblioteca mais antiga do Java, que oferece um conjunto básico de classes para criar componentes visuais como botões, rótulos, janelas e outros elementos gráficos.
+import java.awt.event.*; // Este pacote contém interfaces que permitem que sua aplicação responda a eventos do usuário, como cliques de mouse, pressionamento de teclas, etc.
+import javax.swing.*; // É uma biblioteca mais moderna do Java que oferece componentes visuais mais ricos e personalizáveis em comparação com o AWT. Ela foi construída sobre o AWT, mas oferece uma API mais fácil de usar e componentes com melhor aparência.
 
-public class MenuFrame extends JFrame 
+public class MenuFrame extends JFrame // Definir uma nova classe chamada MenuFrame que estende a classe JFrame. Cria uma nova classe chamada MenuFrame que pode ser usada para criar uma janela com um menu em uma aplicação Java.
 {
    private final Color[] colorValues = 
-      {Color.BLACK, Color.BLUE, Color.RED, Color.GREEN};   
-   private final JRadioButtonMenuItem[] colorItems; // color menu items
-   private final JRadioButtonMenuItem[] fonts; // font menu items
-   private final JCheckBoxMenuItem[] styleItems; // font style menu items
-   private final JLabel displayJLabel; // displays sample text
-   private final ButtonGroup fontButtonGroup; // manages font menu items
-   private final ButtonGroup colorButtonGroup; // manages color menu items
-   private int style; // used to create style for font
+      {Color.BLACK, Color.BLUE, Color.RED, Color.GREEN, Color.YELLOW}; // cria uma lista fixa de cores que será utilizada dentro da classe. Essas cores podem ser usadas para pintar elementos gráficos, como linhas, formas ou texto, em uma aplicação Java.
+   private final JRadioButtonMenuItem[] colorItems; // Declara um array privado e final chamado colorItems. Esse array será usado para armazenar uma coleção de itens de menu do tipo JRadioButtonMenuItem. Esses itens de menu, quando adicionados a um menu, geralmente representam opções de cores que o usuário pode selecionar.
+   private final JRadioButtonMenuItem[] fonts; // Declara um array privado e final de itens de menu de rádio que serão utilizados para representar diferentes fontes em uma aplicação Java com interface gráfica (GUI).
+   private final JCheckBoxMenuItem[] styleItems; // Cria um conjunto fixo de itens de menu com caixas de seleção, que serão utilizados para controlar diferentes estilos ou opções dentro do programa. Esses itens de menu não podem ser modificados após a sua criação e só podem ser acessados dentro da classe onde foram declarados.
+   private final JLabel displayJLabel; // Cria um componente visual (o rótulo) que será usado para mostrar alguma informação na tela. Como é privado e final, esse rótulo só poderá ser configurado uma vez, dentro da classe onde foi declarado, e seu conteúdo não poderá ser alterado depois disso.
+   private final ButtonGroup fontButtonGroup; // Declara um grupo de botões de rádio que será usado para escolher diferentes fontes em um aplicativo Java. Esse grupo de botões é privado, ou seja, só pode ser usado dentro da classe onde foi criado, e é final, ou seja, não pode ser alterado após sua criação.
+   private final ButtonGroup colorButtonGroup; // Cria um grupo de botões de rádio privado e final (não modificável) dentro da classe. Esse grupo será utilizado para permitir que o usuário selecione uma cor entre várias opções, sendo que apenas uma cor pode ser escolhida por vez.
+   private int style; // Cria uma variável interna à classe, que armazena um número inteiro e serve para controlar algum tipo de estilo ou configuração dentro do programa.
 
-   // no-argument constructor set up GUI
+   // construtor sem argumentos configura GUI
    public MenuFrame()
    {
       super("Using JMenus");     
 
-      JMenu fileMenu = new JMenu("File"); // create file menu
-      fileMenu.setMnemonic('F'); // set mnemonic to F
+      JMenu fileMenu = new JMenu("File"); // criar menu de arquivo
+      fileMenu.setMnemonic('F'); // definir mnemônico para F
 
-      // create About... menu item
+      // criar Sobre... item de menu
       JMenuItem aboutItem = new JMenuItem("About...");
-      aboutItem.setMnemonic('A'); // set mnemonic to A
-      fileMenu.add(aboutItem); // add about item to file menu
+      aboutItem.setMnemonic('A'); // definir mnemônico para A
+      fileMenu.add(aboutItem); // adicionar item sobre ao menu de arquivo
       aboutItem.addActionListener(
-         new ActionListener() // anonymous inner class
+         new ActionListener() // classe interna anônima
          {  
-            // display message dialog when user selects About...
+            // exibir caixa de diálogo de mensagem quando o usuário selecionar Sobre...
             @Override
             public void actionPerformed(ActionEvent event)
             {
@@ -41,108 +41,108 @@ public class MenuFrame extends JFrame
          } 
       ); 
  
-      JMenuItem exitItem = new JMenuItem("Exit"); // create exit item
-      exitItem.setMnemonic('x'); // set mnemonic to x
-      fileMenu.add(exitItem); // add exit item to file menu
+      JMenuItem exitItem = new JMenuItem("Exit"); // criar item de saída
+      exitItem.setMnemonic('x'); // definir mnemônico para x
+      fileMenu.add(exitItem); // adicionar item de saída ao menu de arquivo
       exitItem.addActionListener(
-         new ActionListener() // anonymous inner class
+         new ActionListener() // classe interna anônima
          {  
-            // terminate application when user clicks exitItem
+            // encerrar o aplicativo quando o usuário clicar em exitItem
             @Override
             public void actionPerformed(ActionEvent event)
             {
-               System.exit(0); // exit application
+               System.exit(0); // sair do aplicativo
             } 
          }
       ); 
 
-      JMenuBar bar = new JMenuBar(); // create menu bar
-      setJMenuBar(bar); // add menu bar to application
-      bar.add(fileMenu); // add file menu to menu bar
+      JMenuBar bar = new JMenuBar(); // criar barra de menu
+      setJMenuBar(bar); // adicionar barra de menu ao aplicativo
+      bar.add(fileMenu); // adicionar menu de arquivo à barra de menu
 
-      JMenu formatMenu = new JMenu("Format"); // create format menu
-      formatMenu.setMnemonic('r'); // set mnemonic to r
+      JMenu formatMenu = new JMenu("Format"); // criar menu de formato
+      formatMenu.setMnemonic('r'); // definir mnemônico para r
 
-      // array listing string colors
-      String[] colors = {"Black", "Blue", "Red", "Green"};
+      // lista de cores de strings de matriz
+      String[] colors = {"Black", "Blue", "Red", "Green", "Yellow"};
 
-      JMenu colorMenu = new JMenu("Color"); // create color menu
-      colorMenu.setMnemonic('C'); // set mnemonic to C
+      JMenu colorMenu = new JMenu("Color"); // criar menu de cores
+      colorMenu.setMnemonic('C'); // definir mnemônico para C
 
-      // create radio button menu items for colors
+      // criar itens de menu de botões de opção para cores
       colorItems = new JRadioButtonMenuItem[colors.length];
-      colorButtonGroup = new ButtonGroup(); // manages colors
-      ItemHandler itemHandler = new ItemHandler(); // handler for colors
+      colorButtonGroup = new ButtonGroup(); // gerencia cores
+      ItemHandler itemHandler = new ItemHandler(); // manipulador de cores
 
-      // create color radio button menu items
+      // criar itens de menu de botões de opção coloridos
       for (int count = 0; count < colors.length; count++) 
       {
          colorItems[count] = 
-            new JRadioButtonMenuItem(colors[count]); // create item
-         colorMenu.add(colorItems[count]); // add item to color menu
-         colorButtonGroup.add(colorItems[count]); // add to group
+            new JRadioButtonMenuItem(colors[count]); // criar item
+         colorMenu.add(colorItems[count]); // adicionar item ao menu de cores
+         colorButtonGroup.add(colorItems[count]); // adicionar ao grupo
          colorItems[count].addActionListener(itemHandler);
       }
 
-      colorItems[0].setSelected(true); // select first Color item
+      colorItems[0].setSelected(true); // selecione o primeiro item de cor
 
-      formatMenu.add(colorMenu); // add color menu to format menu
-      formatMenu.addSeparator(); // add separator in menu
+      formatMenu.add(colorMenu); // adicionar menu de cores ao menu de formato
+      formatMenu.addSeparator(); // adicionar separador no menu
 
-      // array listing font names
-      String[] fontNames = {"Serif", "Monospaced", "SansSerif"};
-      JMenu fontMenu = new JMenu("Font"); // create font menu
-      fontMenu.setMnemonic('n'); // set mnemonic to n
+      // lista de matriz de nomes de fontes
+      String[] fontNames = {"Serif", "Monospaced", "SansSerif", "Verdana"};
+      JMenu fontMenu = new JMenu("Font"); // criar menu de fontes
+      fontMenu.setMnemonic('n'); // definir mnemônico para n
 
-      // create radio button menu items for font names
+      // crie itens de menu de botões de opção para nomes de fontes
       fonts = new JRadioButtonMenuItem[fontNames.length];
-      fontButtonGroup = new ButtonGroup(); // manages font names
+      fontButtonGroup = new ButtonGroup(); // gerencia nomes de fontes
 
-      // create Font radio button menu items
+      // criar itens de menu de botão de opção de fonte
       for (int count = 0; count < fonts.length; count++) 
       {
          fonts[count] = new JRadioButtonMenuItem(fontNames[count]);
-         fontMenu.add(fonts[count]); // add font to font menu
-         fontButtonGroup.add(fonts[count]); // add to button group
-         fonts[count].addActionListener(itemHandler); // add handler
+         fontMenu.add(fonts[count]); // adicionar fonte ao menu de fontes
+         fontButtonGroup.add(fonts[count]); // adicionar ao grupo de botões
+         fonts[count].addActionListener(itemHandler); // adicionar manipulador
       } 
 
-      fonts[0].setSelected(true); // select first Font menu item
-      fontMenu.addSeparator(); // add separator bar to font menu
+      fonts[0].setSelected(true); // selecione o primeiro item do menu Fonte
+      fontMenu.addSeparator(); // adicionar barra separadora ao menu de fontes
 
-      String[] styleNames = {"Bold", "Italic"}; // names of styles
+      String[] styleNames = {"Bold", "Italic"}; // nomes de estilos
       styleItems = new JCheckBoxMenuItem[styleNames.length];
-      StyleHandler styleHandler = new StyleHandler(); // style handler
+      StyleHandler styleHandler = new StyleHandler(); // manipulador de estilo
 
-      // create style checkbox menu items
+      // criar itens de menu de caixa de seleção de estilo
       for (int count = 0; count < styleNames.length; count++) 
       {
          styleItems[count] = 
-            new JCheckBoxMenuItem(styleNames[count]); // for style
-         fontMenu.add(styleItems[count]); // add to font menu
-         styleItems[count].addItemListener(styleHandler); // handler
+            new JCheckBoxMenuItem(styleNames[count]); // para estilo
+         fontMenu.add(styleItems[count]); // adicionar ao menu de fontes
+         styleItems[count].addItemListener(styleHandler); // manipulador
       }
 
-      formatMenu.add(fontMenu); // add Font menu to Format menu
-      bar.add(formatMenu); // add Format menu to menu bar
+      formatMenu.add(fontMenu); // adicionar menu Fonte ao menu Formato
+      bar.add(formatMenu); // adicionar menu Formatar à barra de menu
      
-      // set up label to display text
+      // configurar rótulo para exibir texto
       displayJLabel = new JLabel("Sample Text", SwingConstants.CENTER);
       displayJLabel.setForeground(colorValues[0]);
       displayJLabel.setFont(new Font("Serif", Font.PLAIN, 72));
 
-      getContentPane().setBackground(Color.CYAN); // set background
-      add(displayJLabel, BorderLayout.CENTER); // add displayJLabel
-   } // end MenuFrame constructor
+      getContentPane().setBackground(Color.CYAN); // definir plano de fundo
+      add(displayJLabel, BorderLayout.CENTER); // adicionar displayJLabel
+   } // fim Construtor MenuFrame
 
-   // inner class to handle action events from menu items
+   // classe interna para manipular eventos de ação de itens de menu
    private class ItemHandler implements ActionListener 
    {
-      // process color and font selections
+      // seleção de cores e fontes do processo
       @Override
       public void actionPerformed(ActionEvent event)
       {
-         // process color selection
+         // seleção de cores do processo
          for (int count = 0; count < colorItems.length; count++)
          {
             if (colorItems[count].isSelected()) 
@@ -152,7 +152,7 @@ public class MenuFrame extends JFrame
             } 
          } 
 
-         // process font selection
+         // processo de seleção de fonte
          for (int count = 0; count < fonts.length; count++)
          {
             if (event.getSource() == fonts[count]) 
@@ -162,21 +162,21 @@ public class MenuFrame extends JFrame
             }
          }
 
-         repaint(); // redraw application
+         repaint(); // redesenhar aplicação
       } 
-   } // end class ItemHandler
+   } // fim da classe ItemHandler
 
-   // inner class to handle item events from checkbox menu items
+   // classe interna para manipular eventos de itens de itens de menu de caixa de seleção
    private class StyleHandler implements ItemListener 
    {
-      // process font style selections
+      // processar seleções de estilo de fonte
       @Override
       public void itemStateChanged(ItemEvent e)
       {
-         String name = displayJLabel.getFont().getName(); // current Font
-         Font font; // new font based on user selections
+         String name = displayJLabel.getFont().getName(); // Fonte atual
+         Font font; // nova fonte com base nas seleções do usuário
 
-         // determine which CheckBoxes are checked and create Font
+         // determinar quais caixas de seleção estão marcadas e criar fonte
          if (styleItems[0].isSelected() && 
               styleItems[1].isSelected())
             font = new Font(name, Font.BOLD + Font.ITALIC, 72);
@@ -188,7 +188,7 @@ public class MenuFrame extends JFrame
             font = new Font(name, Font.PLAIN, 72);
 
          displayJLabel.setFont(font);
-         repaint(); // redraw application
+         repaint(); // redesenhar aplicação
       } 
-   } // end class StyleHandler
-} // end class MenuFrame
+   } // fim da classe StyleHandler
+} // fim da aula MenuFrame
