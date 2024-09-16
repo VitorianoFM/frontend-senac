@@ -9,11 +9,14 @@ public class MenuFrame extends JFrame // Definir uma nova classe chamada MenuFra
       {Color.BLACK, Color.BLUE, Color.RED, Color.GREEN, Color.YELLOW}; // cria uma lista fixa de cores que será utilizada dentro da classe. Essas cores podem ser usadas para pintar elementos gráficos, como linhas, formas ou texto, em uma aplicação Java.
    private final JRadioButtonMenuItem[] colorItems; // Declara um array privado e final chamado colorItems. Esse array será usado para armazenar uma coleção de itens de menu do tipo JRadioButtonMenuItem. Esses itens de menu, quando adicionados a um menu, geralmente representam opções de cores que o usuário pode selecionar.
    private final JRadioButtonMenuItem[] fonts; // Declara um array privado e final de itens de menu de rádio que serão utilizados para representar diferentes fontes em uma aplicação Java com interface gráfica (GUI).
+   private final JRadioButtonMenuItem[] tamanhos;
    private final JCheckBoxMenuItem[] styleItems; // Cria um conjunto fixo de itens de menu com caixas de seleção, que serão utilizados para controlar diferentes estilos ou opções dentro do programa. Esses itens de menu não podem ser modificados após a sua criação e só podem ser acessados dentro da classe onde foram declarados.
    private final JLabel displayJLabel; // Cria um componente visual (o rótulo) que será usado para mostrar alguma informação na tela. Como é privado e final, esse rótulo só poderá ser configurado uma vez, dentro da classe onde foi declarado, e seu conteúdo não poderá ser alterado depois disso.
    private final ButtonGroup fontButtonGroup; // Declara um grupo de botões de rádio que será usado para escolher diferentes fontes em um aplicativo Java. Esse grupo de botões é privado, ou seja, só pode ser usado dentro da classe onde foi criado, e é final, ou seja, não pode ser alterado após sua criação.
    private final ButtonGroup colorButtonGroup; // Cria um grupo de botões de rádio privado e final (não modificável) dentro da classe. Esse grupo será utilizado para permitir que o usuário selecione uma cor entre várias opções, sendo que apenas uma cor pode ser escolhida por vez.
+   private final ButtonGroup tamanhoButtonGroup;
    private int style; // Cria uma variável interna à classe, que armazena um número inteiro e serve para controlar algum tipo de estilo ou configuração dentro do programa.
+   private int tamanhoAtual = 72;
 
    // construtor sem argumentos configura GUI
    public MenuFrame()
@@ -110,7 +113,7 @@ public class MenuFrame extends JFrame // Definir uma nova classe chamada MenuFra
       fonts[0].setSelected(true); // selecione o primeiro item do menu Fonte
       fontMenu.addSeparator(); // adicionar barra separadora ao menu de fontes
 
-      String[] styleNames = {"Bold", "Italic"}; // nomes de estilos
+      String[] styleNames = {"Bold", "Italic", "Underline"}; // nomes de estilos
       styleItems = new JCheckBoxMenuItem[styleNames.length];
       StyleHandler styleHandler = new StyleHandler(); // manipulador de estilo
 
@@ -125,11 +128,32 @@ public class MenuFrame extends JFrame // Definir uma nova classe chamada MenuFra
 
       formatMenu.add(fontMenu); // adicionar menu Fonte ao menu Formato
       bar.add(formatMenu); // adicionar menu Formatar à barra de menu
+
+      formatMenu.addSeparator();
+
+      int[] tamanhoint = {72, 56, 36}; 
+      JMenu tamanhoMenu = new JMenu("Tamanho"); 
+      tamanhoMenu.setMnemonic('T'); 
+
+      tamanhos = new JRadioButtonMenuItem[tamanhoint.length]; 
+      tamanhoButtonGroup = new ButtonGroup(); 
+
+
+      for (int count = 0; count < tamanhos.length; count++) 
+      {
+         tamanhos[count] = new JRadioButtonMenuItem(String.valueOf(tamanhoint[count])); 
+         tamanhoMenu.add(tamanhos[count]); 
+         tamanhoButtonGroup.add(tamanhos[count]); 
+         tamanhos[count].addActionListener(itemHandler); 
+      }
+
+      tamanhos[0].setSelected(true);
+      formatMenu.add(tamanhoMenu);
      
       // configurar rótulo para exibir texto
       displayJLabel = new JLabel("Sample Text", SwingConstants.CENTER);
       displayJLabel.setForeground(colorValues[0]);
-      displayJLabel.setFont(new Font("Serif", Font.PLAIN, 72));
+      displayJLabel.setFont(new Font("Serif", Font.PLAIN, tamanhoAtual));
 
       getContentPane().setBackground(Color.CYAN); // definir plano de fundo
       add(displayJLabel, BorderLayout.CENTER); // adicionar displayJLabel
@@ -158,10 +182,23 @@ public class MenuFrame extends JFrame // Definir uma nova classe chamada MenuFra
             if (event.getSource() == fonts[count]) 
             {
                displayJLabel.setFont(
-                  new Font(fonts[count].getText(), style, 72));
+                  new Font(fonts[count].getText(), style, tamanhoAtual));
             }
          }
 
+         for (int count = 0; count < tamanhos.length; count++) 
+         {
+            if (event.getSource() == tamanhos[count])
+            {
+               int size = Integer.parseInt(tamanhos[count].getText());
+               displayJLabel.setFont(displayJLabel.getFont().deriveFont((float) size));
+               tamanhoAtual = size;
+            }
+         }
+
+         negritoItalico();
+         sublinharTexto();
+         tamanhoTexto();
          repaint(); // redesenhar aplicação
       } 
    } // fim da classe ItemHandler
@@ -169,26 +206,54 @@ public class MenuFrame extends JFrame // Definir uma nova classe chamada MenuFra
    // classe interna para manipular eventos de itens de itens de menu de caixa de seleção
    private class StyleHandler implements ItemListener 
    {
-      // processar seleções de estilo de fonte
       @Override
       public void itemStateChanged(ItemEvent e)
       {
-         String name = displayJLabel.getFont().getName(); // Fonte atual
-         Font font; // nova fonte com base nas seleções do usuário
+         negritoItalico();
+         sublinharTexto();
+         tamanhoTexto();
+         repaint();
+      }
+   }
 
-         // determinar quais caixas de seleção estão marcadas e criar fonte
-         if (styleItems[0].isSelected() && 
-              styleItems[1].isSelected())
-            font = new Font(name, Font.BOLD + Font.ITALIC, 72);
-         else if (styleItems[0].isSelected())
-            font = new Font(name, Font.BOLD, 72);
-         else if (styleItems[1].isSelected())
-            font = new Font(name, Font.ITALIC, 72);
-         else
-            font = new Font(name, Font.PLAIN, 72);
+   public void negritoItalico() {
+      String name = displayJLabel.getFont().getName();
+      Font font;
 
-         displayJLabel.setFont(font);
-         repaint(); // redesenhar aplicação
-      } 
+      if (styleItems[0].isSelected() && 
+           styleItems[1].isSelected())
+         font = new Font(name, Font.BOLD + Font.ITALIC, tamanhoAtual);
+      else if (styleItems[0].isSelected())
+         font = new Font(name, Font.BOLD, tamanhoAtual);
+      else if (styleItems[1].isSelected())
+         font = new Font(name, Font.ITALIC, tamanhoAtual);
+      else
+         font = new Font(name, Font.PLAIN, tamanhoAtual);
+
+      displayJLabel.setFont(font);
+   }
+
+   public void sublinharTexto() {
+      // Font font;
+      if (styleItems[2].isSelected()) {
+         displayJLabel.setText("<html><u>" + displayJLabel.getText() + "</u></html>");
+      //    font = displayJLabel.getFont();
+      //    Map attributes = font.getAttributes();
+      //    attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+      //    displayJLabel.setFont(font.deriveFont(attributes));
+      //    font = new Font(attributes);
+      }
+   }
+
+   public void tamanhoTexto() {
+      for (int count = 0; count < tamanhos.length; count++) 
+      {
+         if (tamanhos[count].isSelected())
+         {
+            int size = Integer.parseInt(tamanhos[count].getText());
+            displayJLabel.setFont(displayJLabel.getFont().deriveFont((float) size));
+            tamanhoAtual = size;
+         }
+      }
    } // fim da classe StyleHandler
 } // fim da aula MenuFrame
