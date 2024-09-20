@@ -43,6 +43,7 @@ public class TelaDePesquisa extends JFrame
       
       btnPesquisar = new JButton("🔍"); // Cria um botão com o texto "Cadastrar".
       btnPesquisar.setToolTipText("Pesquisar");
+      btnPesquisar.setEnabled(false);
       linha_lblPesquisa.add(btnPesquisar);
 
       add(linha_lblPesquisa);
@@ -90,15 +91,19 @@ public class TelaDePesquisa extends JFrame
       JPanel linha_botoes = new JPanel(new GridLayout(1, 4));
       
       btnComeco = new JButton("<<"); // Cria um botão com o texto "<<".
+      btnComeco.setEnabled(false);
       linha_botoes.add(btnComeco); // Adiciona o botão à janela.
 
       btnVoltar = new JButton("<"); // Cria um botão com o texto "<".
+      btnVoltar.setEnabled(false);
       linha_botoes.add(btnVoltar); // Adiciona o botão à janela.
 
       btnAvancar = new JButton(">"); // Cria um botão com o texto ">".
+      btnAvancar.setEnabled(false);
       linha_botoes.add(btnAvancar); // Adiciona o botão à janela.
 
       btnFim = new JButton(">>"); // Cria um botão com o texto ">>".
+      btnFim.setEnabled(false);
       linha_botoes.add(btnFim); // Adiciona o botão à janela.
 
       add(linha_botoes);
@@ -130,10 +135,14 @@ public class TelaDePesquisa extends JFrame
       new KeyAdapter() {
          @Override
          public void keyReleased(KeyEvent e) {
-            if (txtPesquisa.getText().trim().equals(txtUsuario) == false) {
+            if (txtPesquisa.getText().trim().equals(txtUsuario) == false && txtPesquisa.getText().trim().length() > 0) {
                btnPesquisar.setEnabled(true);
             } else {
                btnPesquisar.setEnabled(false);
+            }
+            // System.out.println(e.getKeyCode());
+            if (e.getKeyCode() == 10) {
+               NavegadorDeRegistro.pesquisar();
             }
          }
       }
