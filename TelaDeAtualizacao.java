@@ -1,14 +1,17 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.*;
 
 public class TelaDeAtualizacao extends JFrame {
-
     public static JLabel lblId;
-    public static JComboBox cbxId;
-    public static ArrayList<String> ids = new ArrayList<>();
+    public static JComboBox<String> cbxId;
+    public static String[] ids;
 
     public static JLabel lblNome;
     public static JTextField txtNome;
@@ -17,9 +20,12 @@ public class TelaDeAtualizacao extends JFrame {
     public static JTextField txtEmail;
 
     public static JLabel lblSenha;
-    public static JTextField txtSenha;
+    public static JPasswordField txtSenha;
 
     public static JLabel lblNotificacoes;
+
+    public static JButton btnAtualizar;
+    public static JButton btnCancelar;
 
     public static int tamanhoInputs = 20;
 
@@ -33,7 +39,8 @@ public class TelaDeAtualizacao extends JFrame {
         lblId = new JLabel("Id:", SwingConstants.RIGHT);
         linha_id.add(lblId);
 
-        cbxId = new JComboBox();
+        NavegadorDeRegistro.popularIds();
+        cbxId = new JComboBox(ids);
         linha_id.add(cbxId);
 
         add(linha_id);
@@ -44,7 +51,6 @@ public class TelaDeAtualizacao extends JFrame {
         linha_nome.add(lblNome);
 
         txtNome = new JTextField(tamanhoInputs);
-        txtNome.setEditable(false);
         linha_nome.add(txtNome);
 
         add(linha_nome);
@@ -54,29 +60,28 @@ public class TelaDeAtualizacao extends JFrame {
         lblEmail = new JLabel("Email:", SwingConstants.RIGHT);
         linha_email.add(lblEmail);
 
-        txtEmail = new JTextField(10);
-        txtEmail.setEditable(false);
+        txtEmail = new JTextField(tamanhoInputs);
         linha_email.add(txtEmail);
 
         add(linha_email);
 
-        JPanel linha_botoes = new JPanel(new GridLayout(1, 4));
+        JPanel linha_senha = new JPanel(new GridLayout(1, 2));
 
-        btnPrimeiro = new JButton("<<");
-        btnPrimeiro.setEnabled(false);
-        linha_botoes.add(btnPrimeiro);
+        lblSenha = new JLabel("Senha:", SwingConstants.RIGHT);
+        linha_senha.add(lblSenha);
 
-        btnAnterior = new JButton("<");
-        btnAnterior.setEnabled(false);
-        linha_botoes.add(btnAnterior);
+        txtSenha = new JPasswordField(tamanhoInputs);
+        linha_senha.add(txtSenha);
 
-        btnProximo = new JButton(">");
-        btnProximo.setEnabled(false);
-        linha_botoes.add(btnProximo);
+        add(linha_senha);
 
-        btnUltimo = new JButton(">>");
-        btnUltimo.setEnabled(false);
-        linha_botoes.add(btnUltimo);
+        JPanel linha_botoes = new JPanel(new GridLayout(1, 2));
+
+        btnAtualizar = new JButton("Atualizar");
+        linha_botoes.add(btnAtualizar);
+
+        btnCancelar = new JButton("Cancelar");
+        linha_botoes.add(btnCancelar);
 
         add(linha_botoes);
 
@@ -87,110 +92,67 @@ public class TelaDeAtualizacao extends JFrame {
 
         add(linha_notificacoes);
 
-        btnPesquisar.addActionListener(
+        btnAtualizar.addActionListener(
             new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent event) {
-                    if (txtPesquisa.getText().trim().length() <= 0) {
-                        lblNotificacoes.setText(setHtmlFormat("Por favor, digite algo e tente novamente."));
-                        txtPesquisa.requestFocus();
+                    //...
+                    if (txtNome.getText().trim().length() <= 3) { // Verifica se um campo de texto, identificado por txtNome, contém algum valor válido antes de prosseguir com um cadastro.
+                        lblNotificacoes.setText(setHtmlFormat("É necessário digitar um Nome para o cadastro. Por favor, digite um nome e tente novamente."));
+                        txtNome.requestFocus();
                         return;
-                    } else {
-                        NavegadorDeRegistro.pesquisar();
                     }
-                }
+   
+                    if (txtEmail.getText().trim().length() <= 5) { // Verifica se um campo de texto, identificado por txtEmail, contém algum valor válido antes de prosseguir com um cadastro.
+                        lblNotificacoes.setText(setHtmlFormat("É necessário digitar um Email para o cadastro. Por favor, digite um Email e tente novamente."));
+                        txtEmail.requestFocus();
+                        return;
+                    }
+   
+                    if (String.valueOf(txtSenha.getPassword()).trim().length() <= 7) { // Verifica se um campo de texto, identificado por txtSenha, contém algum valor válido antes de prosseguir com um cadastro.
+                        lblNotificacoes.setText(setHtmlFormat("É necessário digitar uma Senha com 8 digitos para o cadastro. Por favor, digite uma Senha e tente novamente."));
+                        txtSenha.requestFocus();
+                        return;
+                    }
+                   }
+                atualizarRegistro()
             }
         );
 
-        btnPrimeiro.addActionListener(
+        btnCancelar.addActionListener(
             new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent event) {
-                    if (ntfCampoVazio() == false) {
-                        NavegadorDeRegistro.primeiroRegistro();
-                    }
+                    //...
+                    String nome = txtNome.getText();
+                    String email = txtEmail.getText();
+                    String senha = new String(txtSenha.getPassword());
+
+                    // Excluir registros no banco de dados
+                    cancelarRegistro(nome, email, senha);
+
                 }
             }
         );
 
-        btnAnterior.addActionListener(
-            new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent event) {
-                    if (ntfCampoVazio() == false) {
-                        NavegadorDeRegistro.registroAnterior();
+        cbxId.addItemListener(
+            new ItemListener() {
+            @Override
+                public void itemStateChanged(ItemEvent event) {
+                    if (event.getStateChange() == ItemEvent.SELECTED) { // Verifica se o estado da mudança do evento (provavelmente um evento de seleção em um componente GUI) é igual a ItemEvent.SELECTED. Se for verdadeiro, significa que um item foi selecionado.
+                        System.out.println("Teste");
+                        // Aqui vai acontecer a atualização dos nomes, emails e senhas
+                        exibirRegistros();
                     }
-                }
+                } 
             }
         );
 
-        btnProximo.addActionListener(
-            new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent event) {
-                    if (ntfCampoVazio() == false) {
-                        NavegadorDeRegistro.proximoRegistro();
-                    }
-                }
-            }
-        );
-
-        btnUltimo.addActionListener(
-            new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent event) {
-                    if (ntfCampoVazio() == false) {
-                        NavegadorDeRegistro.ultimoRegistro();
-                    }
-                }
-            }
-        );
-
-        txtPesquisa.addKeyListener(
-            new KeyAdapter() {
-                @Override
-                public void keyReleased(KeyEvent e) {
-                    if (txtPesquisa.getText().trim().equals(txtUsuario) == false && txtPesquisa.getText().trim().length() > 0) {
-                        if (e.getKeyCode() == 10) {
-                            NavegadorDeRegistro.pesquisar();
-                        }
-                    } else {
-                        limparCampos("Digite algo para continuar.");
-                    }
-                    btnPesquisar.setEnabled(true);
-                }
-            }
-        );
-
-        setSize(250, 300);
+        setSize(270, 300);
         ImageIcon img = new ImageIcon("./senac-logo.png");
         setIconImage(img.getImage());
         setVisible(true);
-        txtPesquisa.requestFocus();
-    }
-
-    public static boolean ntfCampoVazio() {
-        if (txtPesquisa.getText().trim().length() <= 0) {
-            lblNotificacoes.setText(setHtmlFormat("Ops! Campo vazio. Por favor, digite algo e tente novamente."));
-            txtPesquisa.requestFocus();
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public static void limparCampos(String notificacao) { // limparCampos("")
-        btnPesquisar.setEnabled(false);
-        txtId.setText("");
-        txtNome.setText("");
-        txtEmail.setText("");
-        btnPrimeiro.setEnabled(false);
-        btnAnterior.setEnabled(false);
-        btnProximo.setEnabled(false);
-        btnUltimo.setEnabled(false);
-        if (notificacao.trim().length() > 0) {
-            lblNotificacoes.setText(setHtmlFormat(notificacao));
-        }
+        cbxId.requestFocus();
     }
 
     public static String setHtmlFormat(String strTexto) {
@@ -198,7 +160,7 @@ public class TelaDeAtualizacao extends JFrame {
     }
 
     public static void main(String[] args) {
-        TelaDeAtualizacao appTelaDeAtualizacao = new TelaDeAtualizacao();
-        appTelaDeAtualizacao.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        TelaDeAtualizacao appTelaDePesquisa = new TelaDeAtualizacao();
+        appTelaDePesquisa.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 }
