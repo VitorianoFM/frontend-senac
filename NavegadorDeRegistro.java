@@ -5,8 +5,9 @@ public class NavegadorDeRegistro extends TelaDeAtualizacao {
     public static void popularIds() {
         try {
             ArrayList<String> idsTemp = new ArrayList<>();
+            idsTemp.add("Selecione aqui o id");
             Connection conexao = MySQLConnector.conectar();
-            String strSqlPopularIds = "UPDATE usuarios SET nome = ?, email = ?, senha = ? WHERE id = ?";
+            String strSqlPopularIds = "select * from `db_senac`.`tbl_senac` order by `id` asc;";
             Statement stmSqlPopularIds = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet rstSqlPopularIds = stmSqlPopularIds.executeQuery(strSqlPopularIds);
             while (rstSqlPopularIds.next()) {
@@ -20,28 +21,84 @@ public class NavegadorDeRegistro extends TelaDeAtualizacao {
         }
     }
 
-    private static void atualizarRegistro() {
-        try { // O programa está tentando se conectar ao banco de dados MySQL, executar uma consulta SQL para buscar registros com um determinado endereço de email e armazenar o resultado em um objeto ResultSet.
-            Connection conexao = MySQLConnector.conectar();
-            String strSqlEmail = "select * from `db_senac`.`tbl_senac` where `email` = '" + txtEmail.getText() + "';";
-            Statement stmSqlEmail = conexao.createStatement();
-            ResultSet rstSqlEmail = stmSqlEmail.executeQuery(strSqlEmail);
-            if (rstSqlEmail.next()) { // Verifica a existência de um usuário com determinado e-mail em um banco de dados.
-                lblNotificacoes.setText(setHtmlFormat("Ops! Já existe um usuário utilizando este email. Por favor, digite outro email e tente novamente."));
-            } else { // Verifica se o login é válido. Caso não seja, ele permite que o usuário realize um cadastro. Os dados do cadastro são inseridos em um banco de dados e uma mensagem de confirmação é exibida para o usuário.
-                lblNotificacoes.setText(setHtmlFormat("Login liberado para cadastro."));
-                String strSqlCadastrar = "insert into `db_senac`.`tbl_senac` (`nome`, `email`, `senha`) values ('" + txtNome.getText() + "', '" + txtEmail.getText() + "', '" + String.valueOf(txtSenha.getPassword()) + "');";
-                // System.out.println(strSqlCadastrar);
-                Statement stmSqlCadastrar = conexao.createStatement();
-                stmSqlCadastrar.addBatch(strSqlCadastrar);
-                stmSqlCadastrar.executeBatch();
-                lblNotificacoes.setText(setHtmlFormat("Atualização realizado com sucesso"));
+    public static void atualizarId() {
+        try {
+            String atualizarNome = "";
+            String atualizarEmail = "";
+            String atualizarSenha = "";
+
+            if (txtNome.getText().trim().equals(nomeAtual) == false) {
+                atualizarNome = "`nome` = '" + txtNome.getText() + "'";
             }
-            stmSqlEmail.close(); // Encerra a comunicação com o banco de dados que estava sendo utilizada para realizar as operações relacionadas ao envio de e-mails.
-        } catch (Exception e) { // Se der algum problema ao cadastrar, mostrar uma mensagem de erro para o usuário e imprimir uma mensagem feinha para o programador.
-            lblNotificacoes.setText(setHtmlFormat("Não foi possível prosseguir com a atualização! Por favor, verifique e tente novamente."));
+
+            if (txtEmail.getText().trim().equals(emailAtual) == false) {
+                if (atualizarNome.length() > 0) {
+                    atualizarEmail = " and ";
+                }
+                atualizarEmail += "`email` = '" + txtEmail.getText() + "'";
+            }
+
+            if (String.valueOf(txtSenha.getPassword()).trim().equals(senhaAtual) == false) {
+                if (atualizarNome.length() > 0 || atualizarEmail.length() > 0) {
+                    atualizarSenha = " and ";
+                }
+                atualizarSenha += "`senha` = '" + txtSenha.getPassword().toString() + "'";
+            }
+
+            if (atualizarNome.length() > 0 || atualizarEmail.length() > 0 || atualizarSenha.length() > 0) {
+                Connection conexao = MySQLConnector.conectar();
+                String strSqlAtualizarId = "update `db_senac`.`tbl_senac` set " + atualizarNome + atualizarEmail + atualizarSenha + " where `id` = " + cbxId.getSelectedItem().toString() + ";";
+                System.out.println(strSqlAtualizarId);
+                Statement stmSqlAtualizarId = conexao.createStatement();
+                stmSqlAtualizarId.addBatch(strSqlAtualizarId);
+                stmSqlAtualizarId.executeBatch();
+                nomeAtual = txtNome.getText();
+                emailAtual = txtEmail.getText();
+                senhaAtual = String.valueOf(txtSenha.getPassword());
+                stmSqlAtualizarId.close();
+                lblNotificacoes.setText("O id " + cbxId.getSelectedItem().toString() + " foi atualizado com sucesso!");
+            } else {
+                lblNotificacoes.setText("Não foram encontradas alterações para atualizar o id " + cbxId.getSelectedItem().toString());
+            }
+        } catch (Exception e) {
+            lblNotificacoes.setText(setHtmlFormat("Não foi possível atualizar o id! Por favor, verifique e tente novamente."));
             System.err.println("Erro: " + e);
         }
     }
 
+    public static void limparCampos() {
+        txtNome.setText("");
+        txtEmail.setText("");
+        txtSenha.setText("");
+        cbxId.setSelectedIndex(0);
+    }
+
+    public static void atualizarCampos(String id) {
+        try {
+            if (cbxId.getSelectedIndex() > 0) {
+                Connection conexao = MySQLConnector.conectar();
+                String strSqlAtualizarCampos = "select * from `db_senac`.`tbl_senac` where `id` = " + id + ";";
+                Statement stmSqlAtualizarCampos = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ResultSet rstSqlAtualizarCampos = stmSqlAtualizarCampos.executeQuery(strSqlAtualizarCampos);
+                if (rstSqlAtualizarCampos.next()) {
+                    txtNome.setText(rstSqlAtualizarCampos.getString("nome"));
+                    nomeAtual = txtNome.getText();
+                    txtEmail.setText(rstSqlAtualizarCampos.getString("email"));
+                    emailAtual = txtEmail.getText();
+                    txtSenha.setText(rstSqlAtualizarCampos.getString("senha"));
+                    senhaAtual = String.valueOf(txtSenha.getPassword());
+                    lblNotificacoes.setText("Campos atualizados com sucesso!");
+                } else {
+                    lblNotificacoes.setText("Ops! Não foi encontrado o id selecionado. Por favor, verifique e tente novamente.");
+                }
+                stmSqlAtualizarCampos.close();
+            } else {
+                lblNotificacoes.setText("Selecione um id para continuar.");
+                limparCampos();
+            }
+        } catch (Exception e) {
+            lblNotificacoes.setText(setHtmlFormat("Não foi possível encontrar os ids! Por favor, verifique e tente novamente."));
+            System.err.println("Erro: " + e);
+        }
+    }
 }

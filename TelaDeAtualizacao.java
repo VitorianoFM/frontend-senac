@@ -1,11 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import javax.swing.*;
 
 public class TelaDeAtualizacao extends JFrame {
@@ -15,12 +9,15 @@ public class TelaDeAtualizacao extends JFrame {
 
     public static JLabel lblNome;
     public static JTextField txtNome;
+    public static String nomeAtual;
 
     public static JLabel lblEmail;
     public static JTextField txtEmail;
+    public static String emailAtual;
 
     public static JLabel lblSenha;
     public static JPasswordField txtSenha;
+    public static String senhaAtual;
 
     public static JLabel lblNotificacoes;
 
@@ -96,26 +93,25 @@ public class TelaDeAtualizacao extends JFrame {
             new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent event) {
-                    //...
-                    if (txtNome.getText().trim().length() <= 3) { // Verifica se um campo de texto, identificado por txtNome, contém algum valor válido antes de prosseguir com um cadastro.
-                        lblNotificacoes.setText(setHtmlFormat("É necessário digitar um Nome para o cadastro. Por favor, digite um nome e tente novamente."));
+                    if (txtNome.getText().trim().length() <= 2) { // Verifica se um campo de texto, identificado por txtNome, contém algum valor válido antes de prosseguir com um cadastro.
+                        lblNotificacoes.setText(setHtmlFormat("É necessário digitar ao menos 3 letras para atualizar o nome. Por favor, digite pelo menos 3 letras tente novamente."));
                         txtNome.requestFocus();
                         return;
                     }
    
-                    if (txtEmail.getText().trim().length() <= 5) { // Verifica se um campo de texto, identificado por txtEmail, contém algum valor válido antes de prosseguir com um cadastro.
-                        lblNotificacoes.setText(setHtmlFormat("É necessário digitar um Email para o cadastro. Por favor, digite um Email e tente novamente."));
+                    if (txtEmail.getText().trim().length() <= 10) { // Verifica se um campo de texto, identificado por txtEmail, contém algum valor válido antes de prosseguir com um cadastro.
+                        lblNotificacoes.setText(setHtmlFormat("É necessário digitar ao menos 11 letras para atualizar o Email. Por favor, digite pelo menos 11 letras tente novamente."));
                         txtEmail.requestFocus();
                         return;
                     }
    
                     if (String.valueOf(txtSenha.getPassword()).trim().length() <= 7) { // Verifica se um campo de texto, identificado por txtSenha, contém algum valor válido antes de prosseguir com um cadastro.
-                        lblNotificacoes.setText(setHtmlFormat("É necessário digitar uma Senha com 8 digitos para o cadastro. Por favor, digite uma Senha e tente novamente."));
+                        lblNotificacoes.setText(setHtmlFormat("É necessário digitar uma Senha com 8 digitos para atualizar. Por favor, digite pelo menos 8 letras tente novamente."));
                         txtSenha.requestFocus();
                         return;
                     }
-                   }
-                atualizarRegistro()
+                    NavegadorDeRegistro.atualizarId();
+                }
             }
         );
 
@@ -123,14 +119,7 @@ public class TelaDeAtualizacao extends JFrame {
             new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent event) {
-                    //...
-                    String nome = txtNome.getText();
-                    String email = txtEmail.getText();
-                    String senha = new String(txtSenha.getPassword());
-
-                    // Excluir registros no banco de dados
-                    cancelarRegistro(nome, email, senha);
-
+                    NavegadorDeRegistro.limparCampos();
                 }
             }
         );
@@ -139,16 +128,14 @@ public class TelaDeAtualizacao extends JFrame {
             new ItemListener() {
             @Override
                 public void itemStateChanged(ItemEvent event) {
-                    if (event.getStateChange() == ItemEvent.SELECTED) { // Verifica se o estado da mudança do evento (provavelmente um evento de seleção em um componente GUI) é igual a ItemEvent.SELECTED. Se for verdadeiro, significa que um item foi selecionado.
-                        System.out.println("Teste");
-                        // Aqui vai acontecer a atualização dos nomes, emails e senhas
-                        exibirRegistros();
+                    if (event.getStateChange() == ItemEvent.SELECTED) {
+                        NavegadorDeRegistro.atualizarCampos(cbxId.getSelectedItem().toString());
                     }
                 } 
             }
         );
 
-        setSize(270, 300);
+        setSize(285, 300);
         ImageIcon img = new ImageIcon("./senac-logo.png");
         setIconImage(img.getImage());
         setVisible(true);
@@ -160,7 +147,7 @@ public class TelaDeAtualizacao extends JFrame {
     }
 
     public static void main(String[] args) {
-        TelaDeAtualizacao appTelaDePesquisa = new TelaDeAtualizacao();
-        appTelaDePesquisa.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        TelaDeAtualizacao appTelaDeAtualizacao = new TelaDeAtualizacao();
+        appTelaDeAtualizacao.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 }
