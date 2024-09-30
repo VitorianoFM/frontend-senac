@@ -89,33 +89,16 @@ public class TelaDeAtualizacao extends JFrame {
 
         add(linha_notificacoes);
 
-        btnAtualizar.addActionListener(
+        btnAtualizar.addActionListener( // Adiciona um ouvinte de ação (ActionListener) ao botão btnAtualizar. Isso significa que quando o botão for clicado, o método actionPerformed() será executado.
             new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent event) {
-                    if (txtNome.getText().trim().length() <= 2) { // Verifica se um campo de texto, identificado por txtNome, contém algum valor válido antes de prosseguir com um cadastro.
-                        lblNotificacoes.setText(setHtmlFormat("É necessário digitar ao menos 3 letras para atualizar o nome. Por favor, digite pelo menos 3 letras tente novamente."));
-                        txtNome.requestFocus();
-                        return;
-                    }
-   
-                    if (txtEmail.getText().trim().length() <= 10) { // Verifica se um campo de texto, identificado por txtEmail, contém algum valor válido antes de prosseguir com um cadastro.
-                        lblNotificacoes.setText(setHtmlFormat("É necessário digitar ao menos 11 letras para atualizar o Email. Por favor, digite pelo menos 11 letras tente novamente."));
-                        txtEmail.requestFocus();
-                        return;
-                    }
-   
-                    if (String.valueOf(txtSenha.getPassword()).trim().length() <= 7) { // Verifica se um campo de texto, identificado por txtSenha, contém algum valor válido antes de prosseguir com um cadastro.
-                        lblNotificacoes.setText(setHtmlFormat("É necessário digitar uma Senha com 8 digitos para atualizar. Por favor, digite pelo menos 8 letras tente novamente."));
-                        txtSenha.requestFocus();
-                        return;
-                    }
                     NavegadorDeRegistro.atualizarId();
                 }
             }
         );
 
-        btnCancelar.addActionListener(
+        btnCancelar.addActionListener( // Adiciona um ouvinte de ação ao botão btnCancelar que chama o método limparCampos quando o botão é clicado. Isso provavelmente é usado para cancelar uma operação e limpar os dados de entrada.
             new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent event) {
@@ -124,7 +107,7 @@ public class TelaDeAtualizacao extends JFrame {
             }
         );
 
-        cbxId.addItemListener(
+        cbxId.addItemListener( // Adiciona um listener de item ao componente cbxId. Quando um item é selecionado, o método atualizarCampos é chamado para atualizar os campos de registro com os dados correspondentes ao item selecionado.
             new ItemListener() {
             @Override
                 public void itemStateChanged(ItemEvent event) {
@@ -135,18 +118,18 @@ public class TelaDeAtualizacao extends JFrame {
             }
         );
 
-        setSize(285, 300);
-        ImageIcon img = new ImageIcon("./senac-logo.png");
-        setIconImage(img.getImage());
-        setVisible(true);
-        cbxId.requestFocus();
+        setSize(285, 300); // Define o tamanho da janela para 285 pixels de largura e 300 pixels de altura.
+        ImageIcon img = new ImageIcon("./senac-logo.png"); // Cria um novo objeto ImageIcon chamado "img" e carrega a imagem "senac-logo.png" localizada no mesmo diretório que o código.
+        setIconImage(img.getImage()); // Define a imagem carregada no objeto "img" como o ícone da janela.
+        setVisible(true); // Torna a janela visível na tela.
+        cbxId.requestFocus(); // Dá foco ao componente chamado "cbxId", geralmente um JComboBox (caixa de combinação), fazendo com que ele seja selecionado e pronto para receber entrada do usuário.
     }
 
-    public static String setHtmlFormat(String strTexto) {
+    public static String setHtmlFormat(String strTexto) { // Essa função pega uma string de entrada e a insere dentro de tags HTML para criar um documento HTML completo.
         return "<html><body>" + strTexto + "</body></html>";
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) { // Cria um programa simples que abre uma janela de atualização e configura essa janela para que, ao ser fechada, o programa se encerre.
         TelaDeAtualizacao appTelaDeAtualizacao = new TelaDeAtualizacao();
         appTelaDeAtualizacao.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
