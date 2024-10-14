@@ -1,5 +1,9 @@
 import java.awt.*; // Importa todos os componentes do módulo AWT.
+import java.awt.event.*; // import java.awt.event.*;
+import java.sql.*; // Importa todos os caomponentes do modulos sql para usar o banco de dados do MySQL.
 import javax.swing.*; // Importa todos os componentes do módulo Swing.
+
+import model.MySQLConnector;
 
 // Classe TelaDeLogin que herda de JFrame para criar uma interface gráfica de login.
 public class TelaDeLogin extends JFrame 
@@ -21,13 +25,13 @@ public class TelaDeLogin extends JFrame
       super("Tela de Login"); // Define o título da janela.
       setLayout(new FlowLayout()); // Define o layout da janela como FlowLayout.
 
-      lblLogin = new JLabel("Login"); // Cria um rótulo com o texto "Login".
+      lblLogin = new JLabel("Login:"); // Cria um rótulo com o texto "Login".
       add(lblLogin); // Adiciona o rótulo à janela.
 
       txtLogin = new JTextField(10); // Cria um campo de texto com largura de 10 colunas.
       add(txtLogin); // Adiciona o campo de texto à janela.
       
-      lblSenha = new JLabel("Senha"); // Cria um rótulo com o texto "Senha".
+      lblSenha = new JLabel("Senha:"); // Cria um rótulo com o texto "Senha".
       add(lblSenha); // Adiciona o rótulo à janela.
 
       txtSenha = new JPasswordField(10); // Cria um campo de senha com largura de 10 colunas.
@@ -36,21 +40,46 @@ public class TelaDeLogin extends JFrame
       btnEntrar = new JButton("Entrar"); // Cria um botão com o texto "Entrar".
       add(btnEntrar); // Adiciona o botão à janela.
 
-      add(new JLabel("     ")); // Adiciona um rótulo vazio para espaçamento.
+      //add(new JLabel("     ")); // Adiciona um rótulo vazio para espaçamento.
       lblNotificacoes = new JLabel("Notificações", SwingConstants.CENTER); // Cria um rótulo centralizado para notificações.
       add(lblNotificacoes); // Adiciona o rótulo à janela.
 
-      setSize(50, 250); // Define o tamanho da janela.
+      btnEntrar.addActionListener(
+         new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+               try {
+                  Connection conexao = MySQLConnector.conectar();
+                  String strSqlLogin = "select * from `db_senac`.`tbl_senac` where `email` = '" + txtLogin.getText() + "' and `senha` = '" + String.valueOf(txtSenha.getPassword()) + "';";
+                  Statement stmSqlLogin = conexao.createStatement();
+                  ResultSet rstSqlLogin = stmSqlLogin.executeQuery(strSqlLogin);
+                        if (rstSqlLogin.next()) {
+                            lblNotificacoes.setText(setHtmlFormat("Conectado com sucesso!!!"));
+                        } else {
+                            lblNotificacoes.setText(setHtmlFormat("Login e/ou senha não encontrado! Por favor, verifique e tente novamente."));
+                        }
+                  stmSqlLogin.close();
+               } catch (Exception e) {
+                  lblNotificacoes.setText(setHtmlFormat("Não foi possível encontrar o login e/ou senha digitados/informados! Por favor, verifique e tente novamente. Veja o erro: " + e));
+               }
+            }
+         }
+      );
+      setSize(165, 200); // Define o tamanho da janela.
       setVisible(true); // Torna a janela visível.
-
-      MySQLConnector.conectar(); // Chama o método para conectar ao banco de dados MySQL.
+      // ImageIcon img = new ImageIcon("./senac-logo.png");
+      // setIconImage(img.getImage());
+      
    }
 
-   // Método main, ponto de entrada do programa.
-   public static void main(String[] args) {
-      TelaDeLogin appTelaDeLogin = new TelaDeLogin(); // Cria uma variável da janela de login.
-      appTelaDeLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Define que ao fechar a janela, o programa será encerrado.
-      appTelaDeLogin.setSize(350, 150); // Define o tamanho da janela para 350 pixels de largura e 150 pixels de altura.
-      appTelaDeLogin.setVisible(true); // Torna a janela visível na tela.
-   }
+    public static String setHtmlFormat(String strTexto) { // O método setHtmlFormat recebe uma string como argumento e retorna essa string formatada como um documento HTML básico.
+        return "<html><body>" + strTexto + "</body></html>";
+     }
+     // Método main, ponto de entrada do programa.
+     public static TelaDeLoginView appTelaDeLoginView;
+     public static void main(String[] args) {
+      appTelaDeLoginView = new TelaDeLoginView(); // Cria uma variável da janela de login.
+      appTelaDeLoginView.setDefaultCloseOperation(EXIT_ON_CLOSE); // Define que ao fechar a janela, o programa será encerrado.
+     }
+  
 }
